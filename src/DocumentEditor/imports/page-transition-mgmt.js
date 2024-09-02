@@ -47,16 +47,13 @@ function move_children_forward_recursively(child, child_sibling, stop_condition,
         if (!sub_child_hashes || sub_child_hashes.length === 1) {
           console.log('Handling long continuous word');
           const long_word = sub_child_text;
-          // const split_point = ; // Split the word in half
 
-          // Move the second half of the word to the next page
-          sub_child.textContent = sub_child_text.slice(0, sub_child_text.length - 1);
-          const sub_child_continuation = document.createTextNode(sub_child_text.slice(-1));
-          child_sibling.prepend(sub_child_continuation);
+          // Insert space before the last character so it's treated as normal text
+          const long_word_modified = long_word.slice(0, -1) + ' ' + long_word.slice(-1);
 
-          // Check stop condition and return if met
-          if (stop_condition()) return;
-          continue;
+          // Move the modified word to the next page in chunks
+          sub_child.textContent = long_word_modified;
+          sub_child_hashes = long_word_modified.match(/(\s|\S+)/g);
         }
 
         // Proceed with normal text handling
